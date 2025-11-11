@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>YouTube Proxy Embed</title>
+
+  <!-- Critical: ensure a valid referrer -->
+  <meta name="referrer" content="origin">
+
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    iframe {
+      border: none;
+      width: 100%;
+      height: 100%;
+    }
+    #log {
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 4px 8px;
+      font-size: 12px;
+      color: white;
+      font-family: monospace;
+      background: rgba(0,0,0,0.4);
+    }
+  </style>
+</head>
+<body>
+  <div id="log"></div>
+  <iframe id="yt-player"
+          allow="encrypted-media"
+          allowfullscreen></iframe>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const videoId = params.get("v") || "yYn-uHnLeGQ";
+    const player = document.getElementById("yt-player");
+    const log = document.getElementById("log");
+
+    const embedUrl = `https://www.youtube.com/embed/${videoId}?modestbranding=1&rel=0&controls=1`;
+    player.src = embedUrl;
+
+    // Debug info
+    const write = msg => {
+      log.textContent += msg + "\n";
+      console.log(msg);
+    };
+
+    write("ytproxy loaded");
+    write("videoId: " + videoId);
+    write("document.referrer: " + document.referrer);
+    write("iframe src: " + embedUrl);
+    player.addEventListener("load", () => write("iframe loaded"));
+  </script>
+</body>
+</html>
